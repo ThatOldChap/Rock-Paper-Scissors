@@ -75,7 +75,7 @@
             } else {
                 // Invalid prompt response
                 console.log(`Please enter a valid action.`);
-                return 0;
+                return -2;
             }
         }
 
@@ -86,10 +86,13 @@
         *  @return  A string with only the first charcter capitalized
         */
         function capitalize(string) {
+            console.log(`Before: ${string}`);
             let input = string.toLowerCase();
             let firstChar = input.charAt(0).toUpperCase();
             let otherChars = input.slice(1);
-            return firstChar.concat(otherChars);
+            input = firstChar.concat(otherChars);
+            console.log(`After: ${input}`)
+            return input;
         }
 
         /* 
@@ -135,8 +138,11 @@
                     case -1:
                         // Computer wins round
                         computerScore ++;
-                        promptMessage = `You lose the round! ${computerSelection} beats ${playerSelection}\n`;
-                        
+                        promptMessage = `You lose the round! ${computerSelection} beats ${playerSelection}\n`;                
+                        break;
+                    case -2:
+                        // Invalid input from user
+                        promptMessage = `Please enter a valid input`;
                         break;
                     default:
                         console.log(`Oops, something went wrong! Invalid outcome of: ${outcome}`);
