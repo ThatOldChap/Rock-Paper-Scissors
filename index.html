@@ -70,7 +70,7 @@
                 || playerSelection == "Paper" && computerSelection == "Rock"
                 || playerSelection == "Scissors" && computerSelection == "Paper") {
                 // Results in a Player Win
-                console.log(`You Win! ${computerSelection} beats ${playerSelection}`);
+                console.log(`You Win! ${playerSelection} beats ${computerSelection}`);
                 return 1;
             } else {
                 // Invalid prompt response
@@ -133,7 +133,7 @@
                     case 1:
                         // Player wins round
                         playerScore ++;
-                        promptMessage = `You win the round! ${computerSelection} beats ${playerSelection}\n`;
+                        promptMessage = `You win the round! ${playerSelection} beats ${computerSelection}\n`;
                         break;
                     case -1:
                         // Computer wins round
