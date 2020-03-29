@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<script>
+
+    /* Function that generates the computer action for the game.
+    *  Generates a random integer between 1 and 3 which each
+    *  correspond to an associated action
+    *  
+    *  {0.0000, 0.3333} results in a "1" which equals "Rock"
+    *  {0.3334, 0.6666} results in a "2" which equals "Paper"
+    *  {0.6667, 0.9999} results in a "3" which equals "Scissors"
+    */
+    function computerPlay() {
+        let action = Math.floor(Math.random() * 3) + 1;
+        switch (action) {
+            case 1:
+                console.log(`Rock`);
+                break;
+            case 2:
+                console.log(`Paper`);
+                break;
+            case 3:
+                console.log(`Scissors`);
+            default:
+                console.log(`Oops, something went wrong!`);
+                break;
+        }
+
+        /* Test cases for the random integer generator between 1 and 3
+        console.log(`Test of bounds of 1: 0.0000 -> ${Math.floor(0.0000*3) + 1}`);
+        console.log(`Test of bounds of 1: 0.0001 -> ${Math.floor(0.0001*3) + 1}`);
+        console.log(`Test of bounds of 1: 0.3333 -> ${Math.floor(0.3333*3) + 1}`);
+        console.log(`Test of bounds of 2: 0.3334 -> ${Math.floor(0.3334*3) + 1}`);
+        console.log(`Test of bounds of 2: 0.6666 -> ${Math.floor(0.6666*3) + 1}`);
+        console.log(`Test of bounds of 3: 0.6667 -> ${Math.floor(0.6667*3) + 1}`);
+        console.log(`Test of bounds of 3: 0.9999 -> ${Math.floor(0.9999*3) + 1}`);
+        */
+    }
+
+
+    
+
+</script>
+
+
+</html>
