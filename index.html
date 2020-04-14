@@ -1,51 +1,131 @@
 <!DOCTYPE html>
-
+<head>
+    <meta charset="utf-8"/>
+</head>
 <style>
+    body, html {
+        height: 100%;
+    }
     #title {
         color: black;
         text-align: center;
-        margin-top: 3em;
+        margin-top: 2em;
+        margin-bottom: 2em;
     }
     #play-game {
         padding: 0.75rem 0.75rem 0.75rem 0.75rem;
         font-size: 1.25rem;
         width: max-content;
-        margin-top: 2em;
+    }
+    .play-buttons {
+        padding: 0.75rem 0.75rem 0.75rem 0.75rem;
+        font-size: 1.25rem;
+        margin: 0 0.5rem 0 0.5rem;
     }
     #page {
         display: flex;
         flex-direction: column;
         align-items: center;
     }
+    .player-names {
+        font-size: 2rem;
+        padding: 2rem 1rem 2rem 1rem;
+    }
+    .player-scores {
+        font-size: 7rem;
+        padding: 0 3rem 0 3rem;
+    }
+    .flex-container-row {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+    }
+    .flex-container-column {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
 </style>
 
 <html>
+    
     <body>
         <div id="page">
             <h1 id="title">Rock Paper Scissors</h1>
             <button id="play-game">Play Game</button>
+            <div id="info" class="flex-container-row">
+                <div id="player-info" class="flex-container-column"></div>
+                <div id="computer-info" class="flex-container-column"></div>
+            </div>
+            <div id="play-button-container"></div>
+            <div id="results-list"></div>
         </div>
     </body>
 
     <script>
-        /*
-        *  Rock, Paper Scissors Browser Prompt Game
-        *  By: Michael Chaplin
-        *  Date: April 6, 2020
-        */
+        // -----------------------------------------------------------------------------
+        // Setting up the Name and Score of the Player
+        const playerName = document.createElement('div');
+        playerName.className = 'player-names';
+        playerName.textContent = 'Player';
 
-        /* 
-        *  Randomly generates the computer's action for the game.
-        *  Generates a random integer between 1 and 3 which each
-        *  correspond to an associated action.
-        *  
-        *  {0.0000, 0.3333} results in a "1" which equals "Rock"
-        *  {0.3334, 0.6666} results in a "2" which equals "Paper"
-        *  {0.6667, 0.9999} results in a "3" which equals "Scissors"
-        *
-        *  @param   None
-        *  @return  A string of either "Rock", "Paper" or "Scissors"
-        */
+        let playerScore = document.createElement('div');
+        playerScore.className = 'player-scores';
+        playerScore.textContent = '1'; // Temporary
+
+        const playerInfo = document.querySelector('#player-info');
+        playerInfo.appendChild(playerName);
+        playerInfo.appendChild(playerScore);
+        // -----------------------------------------------------------------------------
+        // Setting up the Name and Score of the Computer
+        const computerName = document.createElement('div');
+        computerName.className = 'player-names';
+        computerName.textContent = 'Computer';
+
+        let computerScore = document.createElement('div');
+        computerScore.className = 'player-scores';
+        computerScore.textContent = '0'; // Temporary
+
+        const computerInfo = document.querySelector('#computer-info');
+        computerInfo.appendChild(computerName);
+        computerInfo.appendChild(computerScore);
+        // -----------------------------------------------------------------------------
+        // Setting up the play buttons for the game
+        const playButtonContainer = document.querySelector('#play-button-container');
+        playButtonContainer.className = 'flex-container-row';
+        playButtonContainer.style.paddingTop = '2rem';
+
+        const rock = document.createElement('button');
+        rock.className = 'play-buttons';
+        rock.textContent = 'Rock';
+
+        const paper = document.createElement('button');
+        paper.className = 'play-buttons';
+        paper.textContent = 'Paper';
+
+        const scissors = document.createElement('button');
+        scissors.className = 'play-buttons';
+        scissors.textContent = 'Scissors';
+
+        playButtonContainer.appendChild(rock);
+        playButtonContainer.appendChild(paper);
+        playButtonContainer.appendChild(scissors);
+        // -----------------------------------------------------------------------------
+        // Setting up the button to start plaing the game
+        const playButton = document.querySelector('#play-game');
+        playButton.addEventListener('click', playGame());
+        // -----------------------------------------------------------------------------
+        // Plays a round of the game using the player's action choice
+        playButtonContainer.addEventListener('click', event => {
+            let playerSelection = event.target.textContent;
+            let computerSelection = computerPlay();
+            console.log(`playerSelection = ${playerSelection}`);
+            outcome = playRound(playerSelection, computerSelection);
+        });
+        // -----------------------------------------------------------------------------
+        // Generates a randomized action for the Computer
         function computerPlay() {
             let action = Math.floor(Math.random() * 3) + 1;
             switch (action) {
@@ -58,7 +138,6 @@
                 default:
                     console.log(`Oops, something went wrong! Action = ${action}`);
             }
-
             /* 
             * Test cases for the random integer generator between 1 and 3
             * console.log(`Test of bounds of 1: 0.0000 -> ${Math.floor(0.0000*3) + 1}`);
@@ -100,25 +179,9 @@
                 return 1;
             } else {
                 // Invalid prompt response
-                console.log(`Please enter a valid action.`);
+                console.log(`Invalid action.`);
                 return -2;
             }
-        }
-
-        /* 
-        *  Formats a given string to make only the first character capitalized.
-        *
-        *  @param   string  The input string that is being formatted  
-        *  @return  A string with only the first charcter capitalized
-        */
-        function capitalize(string) {
-            console.log(`Before: ${string}`);
-            let input = string.toLowerCase();
-            let firstChar = input.charAt(0).toUpperCase();
-            let otherChars = input.slice(1);
-            input = firstChar.concat(otherChars);
-            console.log(`After: ${input}`)
-            return input;
         }
 
         /* 
@@ -133,58 +196,36 @@
             // Variables for the player scores
             let playerScore = 0;
             let computerScore = 0;
-            let outcome = 0;
+            let outcome;
 
-            // Variables for the player selections
-            let playerSelection;
-            let computerSelection;
-
-            // Initial Prompt Message
-            let promptMessage = `Welcome to Rock Paper Scissors!`;
-
-            while (playerScore <= 2 && computerScore <= 2) {
-
-                // Formats the player's selection to work with the game
-                playerSelection = capitalize(window.prompt(`${promptMessage}\n\nChoose your action: Rock, Paper or Scissors?`));
-                computerSelection = computerPlay();
+            while (playerScore <= 5 && computerScore <= 5) {
                 
                 // Determines the outcome of the round
-                outcome = playRound(playerSelection, computerSelection);
-                
                 switch (outcome) {
                     case 0:
                         // This is a draw so do nothing
-                        promptMessage = `The round is a draw! You both played ${computerSelection}\n`;
+                        console.log(`The round is a draw! You both played ${computerSelection}\n`);
                         break;
                     case 1:
                         // Player wins round
                         playerScore ++;
-                        promptMessage = `You win the round! ${playerSelection} beats ${computerSelection}\n`;
+                        console.log(`You win the round! ${playerSelection} beats ${computerSelection}`);
                         break;
                     case -1:
                         // Computer wins round
                         computerScore ++;
-                        promptMessage = `You lose the round! ${computerSelection} beats ${playerSelection}\n`;                
+                        console.log(`You lose the round! ${computerSelection} beats ${playerSelection}`);                
                         break;
                     case -2:
                         // Invalid input from user
-                        promptMessage = `Please enter a valid input`;
+                        console.log(`Invalid outcome`);
                         break;
                     default:
                         console.log(`Oops, something went wrong! Invalid outcome of: ${outcome}`);
                         break;
                 }
-                // Alert to let the user know the outcome of the round
-                window.alert(promptMessage);
-
-                if(playerScore == 2 && computerScore == 2){
-                    promptMessage = `Player: ${playerScore} | Computer: ${computerScore}`;
-                    promptMessage = `\nThe score is tied going into the final round, winner takes all!`;
-                    console.log(promptMessage);
-                } else {
-                    promptMessage = `Player: ${playerScore} | Computer: ${computerScore}`;
-                    console.log(promptMessage);
-                }
+                // Resets the ongoing outcome flag
+                outcome = 0;
             }
 
             // Final score declaration
