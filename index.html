@@ -1,11 +1,37 @@
 <!DOCTYPE html>
 
-    <script>
+<style>
+    #title {
+        color: black;
+        text-align: center;
+        margin-top: 3em;
+    }
+    #play-game {
+        padding: 0.75rem 0.75rem 0.75rem 0.75rem;
+        font-size: 1.25rem;
+        width: max-content;
+        margin-top: 2em;
+    }
+    #page {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+</style>
 
+<html>
+    <body>
+        <div id="page">
+            <h1 id="title">Rock Paper Scissors</h1>
+            <button id="play-game">Play Game</button>
+        </div>
+    </body>
+
+    <script>
         /*
         *  Rock, Paper Scissors Browser Prompt Game
         *  By: Michael Chaplin
-        *  Date: March 29, 2020
+        *  Date: April 6, 2020
         */
 
         /* 
@@ -200,7 +226,4 @@
         }
 
     </script>
-
-    <body onload=playGame()>
-    </body>
 </html>
