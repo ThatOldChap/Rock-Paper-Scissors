@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<!-- Developed by Michael Chaplin -->
+<!-- April 20th, 2020 -->
 <head>
     <meta charset="utf-8"/>
 </head>
@@ -47,10 +49,14 @@
         align-items: center;
         justify-content: center;
     }
+    #results-list {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
 </style>
 
 <html>
-    
     <body>
         <div id="page">
             <h1 id="title">Rock Paper Scissors</h1>
@@ -60,7 +66,7 @@
                 <div id="computer-info" class="flex-container-column"></div>
             </div>
             <div id="play-button-container"></div>
-            <div id="results-list"></div>
+            <ul id="results-list"></ul>
         </div>
     </body>
 
@@ -116,39 +122,85 @@
         playButtonContainer.appendChild(scissors);
 
         // -----------------------------------------------------------------------------
+        // Sets up the round-by-round results of the game
+        const resultsList = document.querySelector('#results-list');
+
+        // -----------------------------------------------------------------------------
         // Setting up the button and scores to start playing the game
         const playButton = document.querySelector('#play-game');
-        playButton.addEventListener('click', function setupGame() {
-            console.log('Game is being setup');
-            // TODO:  Hides play button and shows scores and action buttons
-        });
-
+        const infoContainer = document.querySelector('#info');
         let playerScore = 0;
         let computerScore = 0;
         let roundNum = 0;
+        let gameOver = false;
+
+        playButton.style.visibility = 'visible';
+        playButtonContainer.style.visibility = 'collapse';
+        infoContainer.style.visibility = 'collapse';
+
+        playButton.addEventListener('click', function setupGame() {
+            console.log('Game is being setup');
+
+            resetGame();
+            playButton.style.visibility = 'collapse';
+            playButtonContainer.style.visibility = 'visible';
+            infoContainer.style.visibility = 'visible';
+        });
+
+        // -----------------------------------------------------------------------------
+        // Resets the game
+        function resetGame() {
+            playerScore = 0;
+            computerScore = 0;
+            roundNum = 0;
+            gameOver = false;
+            playerScoreHolder.style.fontSize = '7rem'
+            playerScoreHolder.textContent = '0';
+            computerScoreHolder.style.fontSize = '7rem';
+            computerScoreHolder.textContent = '0';
+        
+            while(resultsList.firstChild){
+                resultsList.removeChild(resultsList.lastChild);
+            }
+        }
 
         // -----------------------------------------------------------------------------
         // Plays a round of the game using the player's action choice
         playButtonContainer.addEventListener('click', event => {
-            let playerSelection = event.target.textContent;
-            let computerSelection = computerPlay();
-            console.log(`playerSelection = ${playerSelection} and computerSelection = ${computerSelection}`);
 
-            roundNum++;
-            console.log(`Playing round ${roundNum}`);
-            playRound(playerSelection, computerSelection);
+            if(event.target.tagName == 'BUTTON'){
+                let playerSelection = event.target.textContent;
+                let computerSelection = computerPlay();
+                console.log(`playerSelection = ${playerSelection} and computerSelection = ${computerSelection}`);
 
-            if (playerScore == 5) {
-                //window.alert(`Congratulations! You beat the Computer by a score of ${playerScore}-${computerScore}`);
-                playerScoreHolder.style.fontSize = '10rem'
-                computerScoreHolder.style.fontSize = '5rem';
-            } else if (computerScore == 5) {
-                //window.alert(`Devastating! The Computer beat you by a score of ${computerScore}-${playerScore}`);
-                playerScoreHolder.style.fontSize = '5rem'
-                computerScoreHolder.style.fontSize = '10rem';
+                roundNum++;
+                console.log(`Playing round ${roundNum}`);
+                playRound(playerSelection, computerSelection);
+
+                // Ends the game and declares a winner
+                if (playerScore == 5 || computerScore == 5) {   
+
+                    gameOver = true;
+                    let winner = document.createElement('li');
+                    winner.style.color = 'red';
+
+                    if(playerScore > computerScore) {
+                        playerScoreHolder.style.fontSize = '10rem'
+                        computerScoreHolder.style.fontSize = '5rem';
+                        winner.textContent = 'Player Wins!!! In the battle of Man vs Machine, Man wins!';
+                    } else {
+                        playerScoreHolder.style.fontSize = '5rem'
+                        computerScoreHolder.style.fontSize = '10rem';
+                        winner.textContent = 'Devastating, the Computer Won. Better luck next time';
+                    }
+                    resultsList.appendChild(winner);
+
+                    playButton.textContent = 'Play Again?';
+                    playButton.style.visibility = 'visible';
+                    playButtonContainer.style.visibility = 'collapse';
+                    infoContainer.style.visibility = 'visible';
+                }
             }
-
-
         });
 
         // -----------------------------------------------------------------------------
@@ -161,15 +213,17 @@
         */
         function playRound(playerSelection, computerSelection) {
 
+            let resultItem = document.createElement('li');
+
             if(playerSelection == computerSelection) {
                 // Results in a Draw
-                console.log(`It's a Draw! You both played ${computerSelection}`);
+                resultItem.textContent = `It's a Draw, ${playerScore}-${computerScore}! You both chose ${playerSelection}.`;
 
             } else if(playerSelection == "Rock" && computerSelection == "Paper"
                 || playerSelection == "Paper" && computerSelection == "Scissors"
                 || playerSelection == "Scissors" && computerSelection == "Rock") {
                 // Results in a Player Loss
-                console.log(`You Lose! ${computerSelection} beats ${playerSelection}`);
+                resultItem.textContent = `Round Lost, ${playerScore}-${computerScore}! The Computer's ${computerSelection} beats Player's ${playerSelection}.`;
                 computerScore++;
                 computerScoreHolder.textContent = computerScore;
 
@@ -177,36 +231,14 @@
                 || playerSelection == "Paper" && computerSelection == "Rock"
                 || playerSelection == "Scissors" && computerSelection == "Paper") {
                 // Results in a Player Win
-                console.log(`You Win! ${playerSelection} beats ${computerSelection}`);
+                resultItem.textContent = `Round Won, ${playerScore}-${computerScore}! Player's ${playerSelection} beats the Computer's ${computerSelection}.`;
                 playerScore++;
                 playerScoreHolder.textContent = playerScore;
             } else {
                 console.log(`Invalid result`);
-            }            
+            }   
+            resultsList.appendChild(resultItem);         
         }
-
-        // -----------------------------------------------------------------------------
-        /* 
-        *  Plays a game of Rock, Paper, Scissors and determines a winner.
-        *  A player can face off against a computer in a best of 3 series.
-        *
-        *  @param   None
-        *  @return  None
-        */
-        /*function playGame() {
-
-
-
-            console.log('The game has commenced');
-            //while (playerScore < 5 && computerScore < 5) {
-                console.log(`The score is Player: ${playerScore} | Computer: ${computerScore}`);
-            //}
-
-            // Final score declaration
-            (playerScore > computerScore)
-                ? window.alert(`Congratulations! You beat the Computer by a score of ${playerScore}-${computerScore}`)
-                : window.alert(`Devastating! The Computer beat you by a score of ${computerScore}-${playerScore}`);
-        }*/
 
         // -----------------------------------------------------------------------------
         // Generates a randomized action for the Computer
@@ -223,12 +255,5 @@
                     console.log(`Oops, something went wrong! Action = ${action}`);
             }
         }
-
-
-        
-
-
-
-
     </script>
 </html>
