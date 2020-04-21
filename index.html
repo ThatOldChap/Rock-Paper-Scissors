@@ -223,16 +223,16 @@
                 || playerSelection == "Paper" && computerSelection == "Scissors"
                 || playerSelection == "Scissors" && computerSelection == "Rock") {
                 // Results in a Player Loss
-                resultItem.textContent = `Round Lost, ${playerScore}-${computerScore}! The Computer's ${computerSelection} beats Player's ${playerSelection}.`;
                 computerScore++;
+                resultItem.textContent = `Round Lost, ${playerScore}-${computerScore}! The Computer's ${computerSelection} beats Player's ${playerSelection}.`;
                 computerScoreHolder.textContent = computerScore;
 
             } else if(playerSelection == "Rock" && computerSelection == "Scissors"
                 || playerSelection == "Paper" && computerSelection == "Rock"
                 || playerSelection == "Scissors" && computerSelection == "Paper") {
                 // Results in a Player Win
-                resultItem.textContent = `Round Won, ${playerScore}-${computerScore}! Player's ${playerSelection} beats the Computer's ${computerSelection}.`;
                 playerScore++;
+                resultItem.textContent = `Round Won, ${playerScore}-${computerScore}! Player's ${playerSelection} beats the Computer's ${computerSelection}.`;
                 playerScoreHolder.textContent = playerScore;
             } else {
                 console.log(`Invalid result`);
